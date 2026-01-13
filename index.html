@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algebra Calculator | Advanced Math Solver</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mathjs@11.6.0/lib/browser/math.js"></script>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-calculator"></i>
+                    <h1>Algebra<span>Pro</span></h1>
+                </div>
+                <p class="tagline">Advanced math solver with visual graphing and step-by-step solutions</p>
+                <div class="header-buttons">
+                    <button class="header-btn" id="themeToggle">
+                        <i class="fas fa-moon"></i> Theme
+                    </button>
+                    <button class="header-btn" id="helpBtn">
+                        <i class="fas fa-question-circle"></i> Help
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="left-panel">
+                <div class="card input-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-keyboard"></i> Equation Input</h2>
+                        <div class="card-controls">
+                            <button class="icon-btn" id="clearInput" title="Clear">
+                                <i class="fas fa-eraser"></i>
+                            </button>
+                            <button class="icon-btn" id="historyBtn" title="History">
+                                <i class="fas fa-history"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="equationInput">
+                            <i class="fas fa-square-root-alt"></i> Enter your equation
+                            <span class="hint">Use the keyboard below or type directly</span>
+                        </label>
+                        <div class="input-container">
+                            <div class="input-with-icon">
+                                <i class="fas fa-equals"></i>
+                                <input type="text" id="equationInput" placeholder="e.g., sin(x), 2*cos(2x), tan(x)" autocomplete="off">
+                            </div>
+                            <div class="variable-selector">
+                                <label for="solveFor">Solve for:</label>
+                                <div class="variable-buttons">
+                                    <button class="var-btn active" data-var="x">x</button>
+                                    <button class="var-btn" data-var="y">y</button>
+                                    <button class="var-btn" data-var="z">z</button>
+                                    <button class="var-btn" data-var="a">a</button>
+                                    <button class="var-btn" data-var="b">b</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="math-keyboard">
+                        <div class="keyboard-section">
+                            <h3><i class="fas fa-calculator"></i> Basic Operations</h3>
+                            <div class="key-row">
+                                <button class="math-key" data-value="+">+</button>
+                                <button class="math-key" data-value="-">-</button>
+                                <button class="math-key" data-value="*">×</button>
+                                <button class="math-key" data-value="/">÷</button>
+                                <button class="math-key" data-value="=">=</button>
+                                <button class="math-key" data-value="(">(</button>
+                                <button class="math-key" data-value=")">)</button>
+                            </div>
+                        </div>
+
+                        <div class="keyboard-section">
+                            <h3><i class="fas fa-superscript"></i> Exponents & Roots</h3>
+                            <div class="key-row">
+                                <button class="math-key" data-value="^">^</button>
+                                <button class="math-key" data-value="^2">x²</button>
+                                <button class="math-key" data-value="^3">x³</button>
+                                <button class="math-key" data-value="sqrt(">√(</button>
+                                <button class="math-key" data-value="cbrt(">∛(</button>
+                                <button class="math-key" data-value="pi">π</button>
+                                <button class="math-key" data-value="e">e</button>
+                            </div>
+                        </div>
+
+                        <div class="keyboard-section">
+                            <h3><i class="fas fa-wave-square"></i> Trigonometric</h3>
+                            <div class="key-row">
+                                <button class="math-key" data-value="sin(">sin(</button>
+                                <button class="math-key" data-value="cos(">cos(</button>
+                                <button class="math-key" data-value="tan(">tan(</button>
+                                <button class="math-key" data-value="asin(">asin(</button>
+                                <button class="math-key" data-value="acos(">acos(</button>
+                                <button class="math-key" data-value="atan(">atan(</button>
+                            </div>
+                        </div>
+
+                        <div class="keyboard-section">
+                            <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                            <div class="key-row">
+                                <button class="action-key solve-action" id="solveBtn">
+                                    <i class="fas fa-bolt"></i> Solve
+                                </button>
+                                <button class="action-key graph-action" id="graphBtn">
+                                    <i class="fas fa-chart-line"></i> Graph
+                                </button>
+                                <button class="action-key simplify-action" id="simplifyBtn">
+                                    <i class="fas fa-compress-alt"></i> Simplify
+                                </button>
+                                <button class="action-key factor-action" id="factorBtn">
+                                    <i class="fas fa-sitemap"></i> Factor
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-examples">
+                        <h3><i class="fas fa-rocket"></i> Quick Examples</h3>
+                        <div class="example-grid">
+                            <button class="example-btn" data-example="sin(x)">sin(x)</button>
+                            <button class="example-btn" data-example="cos(x)">cos(x)</button>
+                            <button class="example-btn" data-example="tan(x)">tan(x)</button>
+                            <button class="example-btn" data-example="2*sin(x)">2sin(x)</button>
+                            <button class="example-btn" data-example="sin(2*x)">sin(2x)</button>
+                            <button class="example-btn" data-example="sin(x)+cos(x)">sin+cos</button>
+                            <button class="example-btn" data-example="sin(x)^2">sin²(x)</button>
+                            <button class="example-btn" data-example="x^2-4">x²-4</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card history-card hidden" id="historyPanel">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history"></i> Calculation History</h2>
+                        <div class="card-controls">
+                            <button class="icon-btn" id="clearHistory" title="Clear History">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button class="icon-btn" id="closeHistory" title="Close">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="empty-history">
+                            <i class="fas fa-history"></i>
+                            <p>No calculations yet</p>
+                            <p class="hint">Your calculations will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <div class="card results-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-list-alt"></i> Solution Steps</h2>
+                        <div class="card-controls">
+                            <button class="icon-btn" id="copyResult" title="Copy Result">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <button class="icon-btn" id="exportBtn" title="Export">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="results-content" id="resultsContent">
+                        <div class="welcome-message">
+                            <div class="welcome-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <h3>Welcome to AlgebraPro</h3>
+                            <p>Enter an equation using the keyboard or examples above, then click "Solve" to see step-by-step solutions here.</p>
+                            <div class="features">
+                                <div class="feature">
+                                    <i class="fas fa-bolt"></i>
+                                    <span>Solve equations instantly</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Visualize with graphs</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-list-ol"></i>
+                                    <span>Step-by-step solutions</span>
+                                </div>
+                                <div class="feature">
+                                    <i class="fas fa-history"></i>
+                                    <span>Session history</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card graph-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Graph Visualization</h2>
+                        <div class="graph-controls">
+                            <button class="icon-btn" id="zoomIn" title="Zoom In">
+                                <i class="fas fa-search-plus"></i>
+                            </button>
+                            <button class="icon-btn" id="zoomOut" title="Zoom Out">
+                                <i class="fas fa-search-minus"></i>
+                            </button>
+                            <button class="icon-btn" id="resetView" title="Reset View">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="graph-container" id="graphContainer">
+                        <div class="graph-placeholder">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Graph will appear here when you plot an equation</p>
+                        </div>
+                    </div>
+                    <div class="graph-settings">
+                        <div class="range-sliders">
+                            <div class="slider-group">
+                                <label>X Range</label>
+                                <div class="slider-with-input">
+                                    <input type="range" id="xRange" min="1" max="20" value="10" class="range-slider">
+                                    <input type="number" id="xMin" value="-10" class="range-input">
+                                    <span>to</span>
+                                    <input type="number" id="xMax" value="10" class="range-input">
+                                </div>
+                            </div>
+                            <div class="slider-group">
+                                <label>Y Range</label>
+                                <div class="slider-with-input">
+                                    <input type="range" id="yRange" min="1" max="20" value="5" class="range-slider">
+                                    <input type="number" id="yMin" value="-5" class="range-input">
+                                    <span>to</span>
+                                    <input type="number" id="yMax" value="5" class="range-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="graph-actions">
+                            <button class="graph-action-btn" id="plotGraph">
+                                <i class="fas fa-play"></i> Plot Graph
+                            </button>
+                            <button class="graph-action-btn secondary" id="clearGraph">
+                                <i class="fas fa-trash"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#" class="footer-link" id="showHelp"><i class="fas fa-book"></i> Documentation</a>
+                    <a href="#" class="footer-link"><i class="fas fa-code"></i> API</a>
+                    <a href="#" class="footer-link"><i class="fas fa-shield-alt"></i> Privacy</a>
+                </div>
+                <div class="footer-info">
+                    <p>AlgebraPro Calculator &copy; 2026 | Created by Shradha Thakur | Powered by Math.js & Plotly.js</p>
+                    <p class="version">Version 2.5.0 | Full trigonometric function support</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay hidden" id="helpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-question-circle"></i> Help & Instructions</h3>
+                <button class="modal-close" id="closeHelp">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="help-section">
+                    <h4>How to Use</h4>
+                    <p>1. Enter your equation using the math keyboard or type directly</p>
+                    <p>2. Select the variable you want to solve for (x, y, z, a, b)</p>
+                    <p>3. Click "Solve" to get step-by-step solutions</p>
+                    <p>4. Click "Graph" to visualize the equation</p>
+                    <p>5. Use "Simplify" to simplify expressions</p>
+                    <p>6. Use "Factor" to factor expressions</p>
+                </div>
+                <div class="help-section">
+                    <h4>Trigonometric Functions</h4>
+                    <div class="operations-grid">
+                        <div class="operation">
+                            <strong>Basic:</strong> sin(x), cos(x), tan(x)
+                        </div>
+                        <div class="operation">
+                            <strong>Inverse:</strong> asin(x), acos(x), atan(x)
+                        </div>
+                        <div class="operation">
+                            <strong>Amplitude:</strong> 2*sin(x), 3*cos(x)
+                        </div>
+                        <div class="operation">
+                            <strong>Frequency:</strong> sin(2x), cos(3x)
+                        </div>
+                        <div class="operation">
+                            <strong>Phase Shift:</strong> sin(x+π/2)
+                        </div>
+                        <div class="operation">
+                            <strong>Combined:</strong> sin(x)+cos(x)
+                        </div>
+                    </div>
+                </div>
+                <div class="help-section">
+                    <h4>Graphing Tips for Trig Functions</h4>
+                    <p>• Use X range -10 to 10 (approx -3π to 3π)</p>
+                    <p>• Use Y range -5 to 5 for most trig functions</p>
+                    <p>• tan(x) has vertical asymptotes at π/2, 3π/2, etc.</p>
+                    <p>• Inverse functions have restricted domains</p>
+                    <p>• Double-click graph to reset view</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
